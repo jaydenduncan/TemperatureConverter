@@ -51,9 +51,10 @@
         android:id="@+id/celsiusEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="35dp"
         android:ems="5"
         android:inputType="numberDecimal"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/convertButton"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         tools:ignore="SpeakableTextPresentCheck" />
