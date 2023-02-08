@@ -8,8 +8,8 @@ import android.view.View;
 import com.example.temperatureconverter.databinding.ActivityMainBinding;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,22 +22,37 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        DecimalFormat df = new DecimalFormat("0.0");
+
         binding.convertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try{
 
-                    if(binding.fahrenheitEditText.getText() != null){
+                    if(!(binding.fahrenheitEditText.getText().toString().equals(""))){
 
                         String fahrenheitText = binding.fahrenheitEditText.getText().toString();
-                        BigDecimal fahrenheitTemp = new BigDecimal(fahrenheitText);
-                        BigDecimal result = fToC(fahrenheitTemp);
+                        double fahrenheitTemp = Double.valueOf(fahrenheitText);
+                        double result = fToC(fahrenheitTemp);
 
-                        binding.celsiusEditText.setText(result.toString());
+                        String finalResult = df.format(result);
+
+                        binding.celsiusEditText.setText(finalResult);
+
+                    }
+                    else if(!(binding.celsiusEditText.getText().toString().equals(""))){
+
+                        String celsiusText = binding.celsiusEditText.getText().toString();
+                        double celsiusTemp = Double.valueOf(celsiusText);
+                        double result = cToF(celsiusTemp);
+
+                        String finalResult = df.format(result);
+
+                        binding.fahrenheitEditText.setText(finalResult);
 
                     }
                     else{
-                        System.out.println("Fahrenheit Text View is empty");
+                        throw new NumberFormatException();
                     }
 
                 }
@@ -48,23 +63,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private BigDecimal fToC(BigDecimal fTemp){
-        MathContext mc = new MathContext(3, RoundingMode.HALF_UP);
+    private double fToC(double fTemp){
 
-        BigDecimal result1 = fTemp.subtract(new BigDecimal("32"), mc);
+        BigDecimal fTempDecimal = new BigDecimal(String.valueOf(fTemp));
 
-        System.out.println(result1.toString());
+        BigDecimal result1 = fTempDecimal.subtract(new BigDecimal("32"));
+        result1.setScale(2, RoundingMode.HALF_UP);
 
-        BigDecimal finalResult = result1.multiply(new BigDecimal(String.valueOf(5/9.0)), mc);
+        BigDecimal finalResult = result1.multiply(new BigDecimal(String.valueOf(5/9.0)));
+        finalResult.setScale(2, RoundingMode.HALF_UP);
 
-        System.out.println(finalResult.toString());
-
-        return finalResult;
+        return finalResult.doubleValue();
     }
 
-    private BigDecimal cToF(BigDecimal cTemp){
-        BigDecimal result = null;
+    private double cToF(double cTemp){
 
-        return result;
+        BigDecimal cTempDecimal = new BigDecimal(String.valueOf(cTemp));
+
+        BigDecimal result1 = cTempDecimal.multiply(new BigDecimal(String.valueOf(9/5.0)));
+
+        BigDecimal finalResult = result1.add(new BigDecimal("32"));
+
+        return finalResult.doubleValue();
     }
 }
