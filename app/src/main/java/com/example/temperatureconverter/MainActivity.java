@@ -81,8 +81,10 @@ public class MainActivity extends AppCompatActivity {
         BigDecimal cTempDecimal = new BigDecimal(String.valueOf(cTemp));
 
         BigDecimal result1 = cTempDecimal.multiply(new BigDecimal(String.valueOf(9/5.0)));
+        result1.setScale(2, RoundingMode.HALF_UP);
 
         BigDecimal finalResult = result1.add(new BigDecimal("32"));
+        finalResult.setScale(2, RoundingMode.HALF_UP);
 
         return finalResult.doubleValue();
     }
